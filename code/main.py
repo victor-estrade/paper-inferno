@@ -146,7 +146,7 @@ def main():
             logger.warn('Error in ploting test_counts_sig_bkg')
             pass
         logger.info('Computing summary statistic for Exp data')
-        sig_weighted_counts, bkg_weighted_counts, total_weighted_counts = inferno.compute_summaries(data_test)
+        sig_weighted_counts, bkg_weighted_counts, total_weighted_counts = inferno.compute_summaries(data_xp)
         logger.info('Ploting...')
         try:
             plt.bar(np.arange(10)+0.1, bkg_weighted_counts, width=0.4, label='b')
