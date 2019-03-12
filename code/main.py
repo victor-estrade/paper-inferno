@@ -99,21 +99,21 @@ def main():
 
         pars = ["mu",
                 "tau_energy_sc",
-                "jet_energy_sc",
-                "lep_energy_sc",
-                "sigma_met",
-                "nasty_background_sc",
+                # "jet_energy_sc",
+                # "lep_energy_sc",
+                # "sigma_met",
+                # "nasty_background_sc",
                 ]
         aux = {"tau_energy_sc" : ds.Normal(loc=config.CALIBRATED_TAU_ENERGY_SCALE,
                                             scale=config.CALIBRATED_TAU_ENERGY_SCALE_ERROR),
-                "jet_energy_sc" : ds.Normal(loc=config.CALIBRATED_JET_ENERGY_SCALE,
-                                            scale=config.CALIBRATED_JET_ENERGY_SCALE_ERROR),
-                "lep_energy_sc" : ds.Normal(loc=config.CALIBRATED_LEP_ENERGY_SCALE,
-                                            scale=config.CALIBRATED_LEP_ENERGY_SCALE_ERROR),
-                "sigma_met" : ds.Normal(loc=config.CALIBRATED_SIGMA_SOFT,
-                                            scale=config.CALIBRATED_SIGMA_SOFT_ERROR),
-                "nasty_background_sc" : ds.Normal(loc=config.CALIBRATED_NASTY_BKG,
-                                            scale=config.CALIBRATED_NASTY_BKG_ERROR),
+                # "jet_energy_sc" : ds.Normal(loc=config.CALIBRATED_JET_ENERGY_SCALE,
+                #                             scale=config.CALIBRATED_JET_ENERGY_SCALE_ERROR),
+                # "lep_energy_sc" : ds.Normal(loc=config.CALIBRATED_LEP_ENERGY_SCALE,
+                #                             scale=config.CALIBRATED_LEP_ENERGY_SCALE_ERROR),
+                # "sigma_met" : ds.Normal(loc=config.CALIBRATED_SIGMA_SOFT,
+                #                             scale=config.CALIBRATED_SIGMA_SOFT_ERROR),
+                # "nasty_background_sc" : ds.Normal(loc=config.CALIBRATED_NASTY_BKG,
+                #                             scale=config.CALIBRATED_NASTY_BKG_ERROR),
                 }
 
         model_name ='{}-{}-{}'.format(args.name, args.n_epochs, i) 
