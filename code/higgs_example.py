@@ -49,11 +49,11 @@ class HiggsExample(object):
 
     # ordered dict with all model parameters
     self.all_pars = OrderedDict([('mu', self.mu),
-                                 ('tau_energy', self.tau_energy_sc),
-                                 ('jet_energy', self.jet_energy_sc),
-                                 ('lep_energy', self.lep_energy_sc),
+                                 ('tau_energy_sc', self.tau_energy_sc),
+                                 ('jet_energy_sc', self.jet_energy_sc),
+                                 ('lep_energy_sc', self.lep_energy_sc),
                                  ('sigma_met', self.sigma_met),
-                                 ('nasty_background', self.nasty_background_sc),
+                                 ('nasty_background_sc', self.nasty_background_sc),
                                  ])
 
   def transform(self, batch, missing_value=0.0, 

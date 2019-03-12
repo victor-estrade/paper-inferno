@@ -199,6 +199,16 @@ class HiggsInferno(object):
       logits, w_1, w_2 = sess.run([self.logits]+self.weights, self.phs_scale)
     return logits, w_1, w_2
 
+  def compute_summaries(self, data):
+      logits, w_1, w_2 = self.get_logits_and_weights(data)
+      w_1 = w_1.reshape(-1)
+      w_2 = w_2.reshape(-1)
+      W = np.concatenate((w_1, w_2), axis=0)
+      sig_weighted_counts = np.bincount(np.argmax(logits[:w_1.shape[0]], axis=1), weights=w_1)
+      bkg_weighted_counts = np.bincount(np.argmax(logits[w_1.shape[0]:], axis=1), weights=w_2)
+      total_weighted_counts = np.bincount(np.argmax(logits, axis=1), weights=W)
+      return sig_weighted_counts, bkg_weighted_counts, total_weighted_counts
+
   def load_weights(self):
     sess = tf.get_default_session()
     last_ckpt = tf.train.latest_checkpoint(self.model_path)
