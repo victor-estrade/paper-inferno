@@ -169,7 +169,7 @@ class HiggsInferno(object):
               break
             except Exception as e:
               n_error_in_train += 1
-              print(e)
+              # print(e)
               print('LOSS', loss_t)
               print('HESS', hess_t)
               if n_error_in_train > 5:
