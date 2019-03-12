@@ -120,22 +120,17 @@ class HiggsBatcher(object):
 
     sess.run(self.iterator.initializer, feed_dict)
 
-  def kaggle_sets(self, set_name,
-                  higgs_data_path="../data/atlas-higgs-challenge-2014-v2.csv"):
-
-    df = pd.read_csv(higgs_data_path)
-
-    s_df =  df.loc[(df.KaggleSet == set_name)]
-    # remove -999.0 missing values by 0
-    s_df = s_df.replace(-999.0,0.0)
+  # def kaggle_sets(self, set_name,
+  #                 higgs_data_path="~/datawarehouse/atlas-higgs-challenge-2014-v2.csv.gz"):
+  def kaggle_sets(self, df):
     # compute mean and stds for set
-    s_f_matrix = s_df.loc[:, self.features].values
+    s_f_matrix = df.loc[:, self.features].values
     mean_and_std = (s_f_matrix.mean(axis=0),s_f_matrix.std(axis=0))
 
     dict_arr = {}
     for c_name in self.c_names:
       dict_arr[c_name] = {}
-      c_df =  s_df.loc[(df.Label == c_name)]
+      c_df = df.loc[(df.Label == c_name)]
       for feature in (self.features+self.extra_columns):
         dict_arr[c_name][feature] = c_df.loc[:,[feature]].values
       # add BalancedWeight columns

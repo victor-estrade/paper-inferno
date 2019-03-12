@@ -62,14 +62,14 @@ class HiggsInferno(object):
     self.logits = self.nn_model(scaled_train_batch)
     self.temperature = tf.placeholder_with_default(1., shape=())
     self.probs = tf.nn.softmax(self.logits / self.temperature)
-
+    self.weights = weights
     s_probs, b_probs = tf.split(self.probs, b_sizes, axis=0)
 
     s_counts = tf.reduce_sum(s_probs*weights[0], axis=0)
     b_counts = tf.reduce_sum(b_probs*weights[1], axis=0)
 
     # add constant small term to avoid NaNs
-    small_const = tf.constant(1e-3)
+    small_const = tf.constant(1e-5)
     self.exp_counts = tf.cast(self.problem.mu * s_counts + b_counts+small_const,
                               dtype=tf.float64)
 
@@ -132,10 +132,10 @@ class HiggsInferno(object):
 
     return cov_nll
 
-  def fit(self, n_epochs, lr, temperature, batch_size, seed, par_phs={}):
+  def fit(self, data_train, data_test, n_epochs, lr, temperature, batch_size, seed, par_phs={}):
 
-    train_dict_arr, mean_and_std = self.batcher.kaggle_sets("t")
-    valid_dict_arr, _ = self.batcher.kaggle_sets("b")
+    train_dict_arr, mean_and_std = self.batcher.kaggle_sets(data_train)
+    valid_dict_arr, _ = self.batcher.kaggle_sets(data_test)
 
     self.phs_scale = {self.scale_means : mean_and_std[0],
                       self.scale_stds : mean_and_std[1]}
@@ -190,15 +190,24 @@ class HiggsInferno(object):
       with open('{model_path}/history.json'.format(model_path=self.model_path), 'w') as fp:
         json.dump(self.history, fp)
 
+  def get_logits_and_weights(self, data, batch_size=-1):
+    dict_arr, _ = self.batcher.kaggle_sets(data)
+    with tf.Session() as sess:
+      self.load_weights()
+      self.batcher.init_iterator(dict_arr=dict_arr,
+                                 batch_size=-1, seed=20)
+      logits, w_1, w_2 = sess.run([self.logits]+self.weights, self.phs_scale)
+    return logits, w_1, w_2
+
   def load_weights(self):
     sess = tf.get_default_session()
     last_ckpt = tf.train.latest_checkpoint(self.model_path)
     print("loading_vars_from", last_ckpt)
     self.saver.restore(sess, last_ckpt)
 
-  def eval_hessian(self, temperature):
+  def eval_hessian(self, valid_data, temperature):
 
-    valid_dict_arr, _ = self.batcher.kaggle_sets("b")
+    valid_dict_arr, _ = self.batcher.kaggle_sets(valid_data)
     phs_val = {self.temperature: temperature, **self.phs_scale}
 
     with tf.Session() as sess:

@@ -49,7 +49,12 @@ class HiggsExample(object):
 
     # ordered dict with all model parameters
     self.all_pars = OrderedDict([('mu', self.mu),
-                                 ('tau_energy', self.tau_energy)])
+                                 ('tau_energy', self.tau_energy_sc),
+                                 ('jet_energy', self.jet_energy_sc),
+                                 ('lep_energy', self.lep_energy_sc),
+                                 ('sigma_met', self.sigma_met),
+                                 ('nasty_background', self.nasty_background_sc),
+                                 ])
 
   def transform(self, batch, missing_value=0.0, 
                 allow_soft_term=True, 
@@ -60,7 +65,7 @@ class HiggsExample(object):
     if allow_soft_term:
         soft_term(batch, self.sigma_met, missing_value=missing_value)
     if allow_nasty_bacground:
-        nasty_background(batch, self.sigma_met, missing_value=missing_value)
+        nasty_background(batch, self.nasty_background_sc)
 
     return batch
 
