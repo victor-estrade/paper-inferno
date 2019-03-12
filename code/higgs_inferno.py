@@ -157,7 +157,7 @@ class HiggsInferno(object):
           shuffle_seed = rs.randint(np.iinfo(np.int32).max)
           self.batcher.init_iterator(dict_arr=train_dict_arr,
                                      batch_size=batch_size, seed=shuffle_seed)
-          n_error_in_train = 0
+          # n_error_in_train = 0
           while True:
             try:
               batch_n += 1
@@ -167,13 +167,13 @@ class HiggsInferno(object):
                   [batch_n, float(np.sqrt(loss_t))])
             except tf.errors.OutOfRangeError:
               break
-            except Exception as e:
-              n_error_in_train += 1
-              # print(e)
-              print('LOSS', loss_t)
-              print('HESS', hess_t)
-              if n_error_in_train > 5:
-                break
+            # except Exception as e:
+            #   n_error_in_train += 1
+            #   # print(e)
+            #   print('LOSS', loss_t)
+            #   print('HESS', hess_t)
+            #   if n_error_in_train > 5:
+            #     break
           # fix seed for validation set (no need to shuffle)
           self.batcher.init_iterator(dict_arr=valid_dict_arr,
                                      batch_size=batch_size, seed=20)
