@@ -166,6 +166,8 @@ class HiggsInferno(object):
                   [batch_n, float(np.sqrt(loss_t))])
             except tf.errors.OutOfRangeError:
               break
+            except Exception as e:
+              print(e)
           # fix seed for validation set (no need to shuffle)
           self.batcher.init_iterator(dict_arr=valid_dict_arr,
                                      batch_size=batch_size, seed=20)
