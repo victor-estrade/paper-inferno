@@ -69,7 +69,7 @@ class HiggsInferno(object):
     b_counts = tf.reduce_sum(b_probs*weights[1], axis=0)
 
     # add constant small term to avoid NaNs
-    small_const = tf.constant(1e-5)
+    small_const = tf.constant(1e-3)
     self.exp_counts = tf.cast(self.problem.mu * s_counts + b_counts+small_const,
                               dtype=tf.float64)
 
