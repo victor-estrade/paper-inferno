@@ -45,6 +45,10 @@ def parse_args():
 
     parser.add_argument('--n-epochs', help='number of epochs',
                         default=100, type=int)
+
+    parser.add_argument('--batch-size', help='batch size',
+                        default=2000, type=int)
+
     parser.add_argument("--name", type=str,
                         default="higgs_default", help="directory name where to save the model")
 
@@ -116,7 +120,7 @@ def main():
                 #                             scale=config.CALIBRATED_NASTY_BKG_ERROR),
                 }
 
-        model_name ='{}-{}-{}'.format(args.name, args.n_epochs, i) 
+        model_name ='{}-{}-{}-{}'.format(args.name, args.batch_size, args.n_epochs, i) 
         model_path = os.path.join(config.SAVING_DIR, model_name)
         os.makedirs(model_path, exist_ok=True)
 
@@ -126,7 +130,7 @@ def main():
         inferno = HiggsInferno(model_path=model_path,
                                 poi="mu", pars=pars, seed=17, aux=aux)
         inferno.fit(data_train, data_test, n_epochs=args.n_epochs, lr=1e-3,
-                  temperature=0.1, batch_size=1024, seed=17)
+                  temperature=0.1, batch_size=args.batch_size, seed=17)
         logger.info('End of training {}'.format(model_name))
         
         # COMPUTE SUMMARIES
