@@ -50,22 +50,22 @@ class HiggsExample(object):
     # ordered dict with all model parameters
     self.all_pars = OrderedDict([('mu', self.mu),
                                  ('tau_energy_sc', self.tau_energy_sc),
-                                 # ('jet_energy_sc', self.jet_energy_sc),
-                                 # ('lep_energy_sc', self.lep_energy_sc),
-                                 # ('sigma_met', self.sigma_met),
-                                 # ('nasty_background_sc', self.nasty_background_sc),
+                                 ('jet_energy_sc', self.jet_energy_sc),
+                                 ('lep_energy_sc', self.lep_energy_sc),
+                                 ('sigma_met', self.sigma_met),
+                                 ('nasty_background_sc', self.nasty_background_sc),
                                  ])
 
   def transform(self, batch, missing_value=0.0, 
                 allow_soft_term=True, 
                 allow_nasty_bacground=True):
     tau_energy_scale(batch, self.tau_energy_sc, missing_value=missing_value)
-    # jet_energy_scale(batch, self.jet_energy_sc, missing_value=missing_value)
-    # lep_energy_scale(batch, self.lep_energy_sc, missing_value=missing_value)
-    # if allow_soft_term:
-    #     soft_term(batch, self.sigma_met, missing_value=missing_value)
-    # if allow_nasty_bacground:
-    #     nasty_background(batch, self.nasty_background_sc)
+    jet_energy_scale(batch, self.jet_energy_sc, missing_value=missing_value)
+    lep_energy_scale(batch, self.lep_energy_sc, missing_value=missing_value)
+    if allow_soft_term:
+        soft_term(batch, self.sigma_met, missing_value=missing_value)
+    if allow_nasty_bacground:
+        nasty_background(batch, self.nasty_background_sc)
 
     return batch
 
