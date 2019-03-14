@@ -139,6 +139,8 @@ class HiggsInferno(object):
 
     self.phs_scale = {self.scale_means : mean_and_std[0],
                       self.scale_stds : mean_and_std[1]}
+    if self.NOTRAIN :
+      return
 
     phs_train = {self.lr: lr,
                  self.temperature: temperature,
@@ -200,10 +202,12 @@ class HiggsInferno(object):
 
   def get_logits_and_weights(self, data, batch_size=-1):
     dict_arr, _ = self.batcher.kaggle_sets(data)
+    # print(dict_arr)
+    # raise ValueError('HERE')
     with tf.Session() as sess:
       self.load_weights()
       self.batcher.init_iterator(dict_arr=dict_arr,
-                                 batch_size=-1, seed=20)
+                                 batch_size=batch_size, seed=20)
       logits, w_1, w_2 = sess.run([self.logits]+self.weights, self.phs_scale)
     return logits, w_1, w_2
 

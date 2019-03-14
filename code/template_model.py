@@ -17,7 +17,10 @@ ds = tfp.distributions
 
 def int_quad_lin(alpha, c_nom, c_up, c_dw, multiple_pars=False):
   "Three-point interpolation, quadratic inside and linear outside"
-
+  # c_nom = [10]
+  # c_up = [5 10]
+  # c_dw = [5 10]
+  # alpha = [5 1]
   if multiple_pars:
     tiling_shape = [1, 1, 1, tf.shape(c_nom)[0]]
     expand_axis = 1
@@ -26,7 +29,11 @@ def int_quad_lin(alpha, c_nom, c_up, c_dw, multiple_pars=False):
     expand_axis = 0
   # alpha dimensions are (1, n_par_types, n_par_inst)
   # c_dw and c_up are (n_bins, n_par_types)
+  # expended alpha = [5 1 1]
+  #alpha =  [a for a in zip(*alpha)]
   alpha_t = tf.tile(tf.expand_dims(alpha, axis=-1), tiling_shape)
+  # alpha_t = [1 1 5]
+
   # alpha_t dimensions are (1, n_par_types, n_par_inst, n_bins)
   # if multiple_pars is True or (1, n_par_types, n_bins)
   a = tf.expand_dims(0.5 * (c_up + c_dw) - c_nom,
@@ -46,7 +53,7 @@ def int_quad_lin(alpha, c_nom, c_up, c_dw, multiple_pars=False):
                      (alpha_t - tf.sign(alpha_t)) + switch,
                      a * tf.pow(alpha_t, 2) + b * alpha_t)
   # abs_var is (1, n_par_types, n_par_inst, n_bins) or (1, n_par_types, n_bins)
-  return c_nom + tf.reduce_sum(abs_var, axis=1)
+  return c_nom + tf.reduce_sum(abs_var, axis=1), alpha_t, a, b
 
 
 class TemplateModel(object):

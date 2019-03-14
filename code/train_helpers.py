@@ -107,7 +107,6 @@ class HiggsBatcher(object):
     self.batch = self.iterator.get_next()
 
   def init_iterator(self, dict_arr, batch_size, seed):
-
     sess = tf.get_default_session()
     feed_dict = {}
     if batch_size == -1:
@@ -124,6 +123,8 @@ class HiggsBatcher(object):
   #                 higgs_data_path="~/datawarehouse/atlas-higgs-challenge-2014-v2.csv.gz"):
   def kaggle_sets(self, df):
     # compute mean and stds for set
+    # print('HERE !!!!!!!!!', self.c_names)
+    
     s_f_matrix = df.loc[:, self.features].values
     mean_and_std = (s_f_matrix.mean(axis=0),s_f_matrix.std(axis=0))
 

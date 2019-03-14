@@ -286,8 +286,8 @@ def getDetailLabel(origWeight, Label, num=True):
 
     iWeight=int(1e7*origWeight+0.5)
     detailLabel = detailLabelDict.get(iWeight, "W") # "W" is the default value if not found
-    if detailLabel == "W" and (Label != 0 and Label != 'b') :
-        raise ValueError("ERROR! if not in detailLabelDict sould have Label==1 ({}, {})".format(iWeight,Label))
+    # if detailLabel == "W" and (Label != 0 and Label != 'b') :
+    #     raise ValueError("ERROR! if not in detailLabelDict sould have Label==1 ({}, {})".format(iWeight,Label))
     return detailLabel
 
 def add_detail_label(data, num=True):
@@ -366,10 +366,10 @@ def nasty_background(data, systBkgNorm):
     # only a weight manipulation
     if not "origWeight" in data.columns:
         data["origWeight"] = data["Weight"]
-    if not "detailLabel" in data.columns:
+    if not "detailLabel" in datasetta.columns:
         add_detail_label(data)
     # scale the weight, arbitrary but reasonable value
-    data["Weight"] = ( data["Weight"]*systBkgNorm ).where(data["detailLabel"] == "W", other=data["origWeight"])
+    data["Weight"] = ( data["Weight"]*systBkgNorm ).where(data["detailLabel"] == "W", other=data["Weight"])
     # data.drop(["origWeight", "detailLabel"], axis=1, inplace=True)
 
 
